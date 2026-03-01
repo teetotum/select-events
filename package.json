@@ -1,0 +1,36 @@
+{
+  "name": "select-events",
+  "version": "0.1.0",
+  "description": "Adding open / close events for SELECT elements, so script code can listen for a select's picker dropdown being shown or hidden",
+  "author": {
+    "name": "Martin Winkler",
+    "url": "https://github.com/teetotum"
+  },
+  "keywords": [
+    "select",
+    "picker",
+    "dropdown",
+    "toggle",
+    "open",
+    "close",
+    "show",
+    "hide",
+    "event"
+  ],
+  "homepage": "https://github.com/teetotum/select-events",
+  "bugs": "https://github.com/teetotum/select-events/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teetotum/select-events.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/currentlyUnsupported.js",
+    "./non-standard-open-close": "./src/nonStandardOpenClose.js"
+  },
+  "types": "./src/types.d.ts",
+  "files": [
+    "src"
+  ]
+}

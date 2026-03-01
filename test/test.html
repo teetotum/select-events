@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+        body {
+            padding-top: 100px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-rows: auto auto auto auto;
+            justify-items: center;
+        }
+        .custom-select {
+            &, &::picker(select) {
+            appearance: base-select;
+            }
+        }
+    </style>
+    <script src="shadowDomSelect.js"></script>
+    <script src="../src/nonStandardOpenClose.js"></script>
+  </head>
+  <body>
+
+    <div>
+      <select class="default-select">
+        <option value="timmy">Timmy</option>
+        <option value="tummy">Tummy</option>
+        <option value="tommy">Tommy</option>
+      </select>
+    </div>
+
+    <div>
+      <select class="custom-select">
+        <option value="timmy">Timmy</option>
+        <option value="tummy">Tummy</option>
+        <option value="tommy">Tommy</option>
+      </select>
+    </div>
+
+    <div>
+      <select class="no-direct-listeners-select">
+        <option value="timmy">Timmy</option>
+        <option value="tummy">Tummy</option>
+        <option value="tommy">Tommy</option>
+      </select>
+    </div>
+
+    <div>
+      <shadow-dom-select class="shadow-dom-select"></shadow-dom-select>
+    </div>
+
+    <div>
+      <button id="add-select">dynamically add SELECT</button>
+    </div>
+
+    <script src="test.js" type="module"></script>
+  </body>
+</html>
