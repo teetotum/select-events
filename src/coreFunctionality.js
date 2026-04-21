@@ -5,7 +5,7 @@ const listeners = [];
 
 const setup = () => {
     const processor = new ElementTypeProcessor('select', (element) => {
-        setupWatcher(element, (element, opened) => {
+        const { shutdown } = setupWatcher(element, (element, opened) => {
             listeners.forEach((listener) => listener(element, opened));
         });
     });

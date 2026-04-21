@@ -25,6 +25,8 @@ document.addEventListener('--select-close', () => { console.log('Some picker clo
 
 ## using select picker detection without polyfilling anything
 
+**available starting with v0.2.0 - yet to be released**
+
 If you need to detect opening/closing `<select>` pickers without polyfilling anything automatically (i.e. without side effects) you can use the `select-events/core` package subpath.
 
 Currently only `observeGlobally()` is exposed (detect any opening/closing `<select>` pickers document-wide); a complementary `observeElement()` is not implemented (detect an opening/closing picker for a given `<select>` element)
