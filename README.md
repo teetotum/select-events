@@ -23,6 +23,28 @@ selectElement.addEventListener('--select-open', () => { console.log('This picker
 document.addEventListener('--select-close', () => { console.log('Some picker closed!'); });
 ```
 
+## using select picker detection without polyfilling anything
+
+If you need to detect opening/closing `<select>` pickers without polyfilling anything automatically (i.e. without side effects) you can use the `select-events/core` package subpath.
+
+Currently only `observeGlobally()` is exposed (detect any opening/closing `<select>` pickers document-wide); a complementary `observeElement()` is not implemented (detect an opening/closing picker for a given `<select>` element)
+
+```js
+import { observeGlobally } from "select-events/core";
+
+observeGlobally(
+    (select, selectOpened) => {
+        if (selectOpened)
+            console.log(`element ${select} picker opened`)
+        else
+            console.log(`element ${select} picker closed`)
+    }
+)
+```
+
+To start global observation `observeGlobally()` must be called with a callback; which will receive the HTML `<select>` element reference (and a bool flag indicating `pickerOpened`) whenever any select's picker opens or closes anywhere in the document.
+Currently there is no _teardown_ mechanism to stop observing.
+
 ## Why the weird naming?
 
 You might wonder why the import path must be `select-events/non-standard-open-close` and why the event types are prefixed with two dashes.

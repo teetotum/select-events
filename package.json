@@ -1,6 +1,6 @@
 {
   "name": "select-events",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Adding open / close events for SELECT elements, so script code can listen for a select's picker dropdown being shown or hidden",
   "author": {
     "name": "Martin Winkler",
@@ -27,7 +27,8 @@
   "type": "module",
   "exports": {
     ".": "./src/currentlyUnsupported.js",
-    "./non-standard-open-close": "./src/nonStandardOpenClose.js"
+    "./non-standard-open-close": "./src/nonStandardOpenClose.js",
+    "./core": "./src/coreFunctionality.js"
   },
   "types": "./src/types.d.ts",
   "files": [
