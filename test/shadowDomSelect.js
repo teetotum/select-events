@@ -8,6 +8,7 @@ class ShadowDomSelect extends HTMLElement {
         <option value="tummy">Tummy</option>
         <option value="tommy">Tommy</option>
       </select>
+      <div></div>
     `;
   }
 }

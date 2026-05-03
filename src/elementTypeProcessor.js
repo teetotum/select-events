@@ -22,8 +22,13 @@ export class ElementTypeProcessor {
         this.#processElement(matchedElement);
     }
 
+    // Caution: 'root' here is not always a Node.ELEMENT_NODE (i.e. an Element)
+    // if the provided 'root'...
+    // - was obtained from window.document it is of type Node.DOCUMENT_NODE
+    // - was obtained from node.shadowRoot it is of type Node.DOCUMENT_FRAGMENT_NODE
+    // ...and therefore has no .matches() method.
     #scanSubtree(root) {
-        if (root.matches(this.#elementType)) this.#handleMatch(root);
+        if (root.matches?.(this.#elementType)) this.#handleMatch(root);
         root.querySelectorAll(this.#elementType).forEach((match) => this.#handleMatch(match));
     }
 
@@ -70,7 +75,7 @@ export class ElementTypeProcessor {
         if (this.#started) return;
         this.#started = true;
 
-        this.#handleSubtreeRoot(document.documentElement);
+        this.#handleSubtreeRoot(document);
     }
 
     stop() {
