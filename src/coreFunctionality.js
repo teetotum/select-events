@@ -1,35 +1,51 @@
 import { ElementTypeProcessor } from './elementTypeProcessor.js'
 import { setupWatcher } from './elementWatcher.js'
 
-const listeners = [];
+const global_listeners = new Set();
 
-const setup = () => {
-    const processor = new ElementTypeProcessor('select', (element) => {
-        const { shutdown } = setupWatcher(element, (element, opened) => {
-            listeners.forEach((listener) => listener(element, opened));
-        });
+const processor = new ElementTypeProcessor('select', (element) => {
+    setupWatcher(element, (element, opened) => {
+        global_listeners.forEach((listener) => listener(element, opened));
     });
-    processor.start();
-}
+});
 
-const init = () => {
-    if (document.readyState === 'loading') {
-        document.addEventListener('readystatechange', setup, { once: true });
-    } else {
-        setup();
+let readyStatePromise;
+
+const readyStatePastLoading = () => {
+    if (!readyStatePromise) {
+        readyStatePromise = new Promise((resolve, reject) => {
+            if (document.readyState === 'loading') {
+                document.addEventListener('readystatechange', () => resolve(), { once: true });
+            } else {
+                resolve();
+            }
+        });
     }
+    return readyStatePromise;
 }
 
-let initialized = false;
-
-const ensureInit = () => {
-    if (initialized) return;
-
-    init();
-    initialized = true;
+const asyncCheckStartCondition = async () => {
+    await readyStatePastLoading();
+    if (global_listeners.size > 0) processor.start();
 }
+
+const checkStopCondition = () => {
+    if (global_listeners.size === 0) processor.stop();
+};
 
 export const observeGlobally = (callback) => {
-    listeners.push(callback);
-    ensureInit();
+    global_listeners.add(callback);
+    asyncCheckStartCondition();
+    const disconnect = () => {
+        global_listeners.delete(callback);
+        checkStopCondition();
+    };
+    return { disconnect };
+}
+
+export const observeElement = (element, callback) => {
+    const { disconnect } = setupWatcher(element, (element, opened) => {
+        callback(element, opened);
+    });
+    return { disconnect };
 }

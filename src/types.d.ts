@@ -1,13 +1,22 @@
 declare module "select-events/non-standard-open-close" {}
 
 declare module "select-events/core" {
-    interface GlobalObserverCallback {
+    interface ObserverCallback {
         (element: HTMLSelectElement, selectOpened: boolean): unknown
     }
 
-    interface GlobalObserver {
-        (callback: GlobalObserverCallback): void
+    interface ObserverHandle {
+        disconnect: () => void
     }
 
-    export const observeGlobally: GlobalObserver
+    interface GlobalObserverFunction {
+        (callback: ObserverCallback): ObserverHandle
+    }
+
+    interface ElementObserverFunction {
+        (element: HTMLSelectElement, callback: ObserverCallback): ObserverHandle
+    }
+
+    export const observeGlobally: GlobalObserverFunction
+    export const observeElement: ElementObserverFunction
 }

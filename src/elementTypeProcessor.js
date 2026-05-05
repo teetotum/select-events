@@ -54,15 +54,15 @@ export class ElementTypeProcessor {
         this.#registry.register(root, observer, observer); // the duplicated 'observer' is no mistake, the observer is used as finalization token AND as unregister token
     }
 
-    #checkShadowRoot(node) {
+    #checkForShadowRoot(node) {
         if (node.shadowRoot) {
             this.#handleSubtreeRoot(node.shadowRoot);
         }
     }
 
     #checkSubtreeForShadowRoots(node) {
-        this.#checkShadowRoot(node);
-        node.querySelectorAll('*').forEach((child) => this.#checkShadowRoot(child));
+        this.#checkForShadowRoot(node);
+        node.querySelectorAll('*').forEach((child) => this.#checkForShadowRoot(child));
     }
 
     #handleSubtreeRoot(rootNode) {

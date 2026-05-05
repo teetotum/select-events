@@ -29,23 +29,53 @@ document.addEventListener('--select-close', () => { console.log('Some picker clo
 
 If you need to detect opening/closing `<select>` pickers without polyfilling anything automatically (i.e. without side effects) you can use the `select-events/core` package subpath.
 
-Currently only `observeGlobally()` is exposed (detect any opening/closing `<select>` pickers document-wide); a complementary `observeElement()` is not implemented (detect an opening/closing picker for a given `<select>` element)
+The following functions are exposed:
+- `observeGlobally()` detect any opening/closing `<select>` pickers document-wide
+- `observeElement()` detect an opening/closing picker for a given `<select>` element
+
+### observeGlobally
 
 ```js
 import { observeGlobally } from "select-events/core";
 
-observeGlobally(
+// start document-wide observation by calling observeGlobally()
+const { disconnect } = observeGlobally(
     (select, selectOpened) => {
         if (selectOpened)
             console.log(`element ${select} picker opened`)
         else
             console.log(`element ${select} picker closed`)
     }
-)
+);
+
+// end the observation anytime by calling disconnect()
+disconnect();
 ```
 
-To start global observation `observeGlobally()` must be called with a callback; which will receive the HTML `<select>` element reference (and a bool flag indicating `pickerOpened`) whenever any select's picker opens or closes anywhere in the document.
-Currently there is no _teardown_ mechanism to stop observing.
+To start global observation `observeGlobally()` must be called with a callback, that will receive the HTML `<select>` element reference and a bool flag indicating `pickerOpened` whenever any select's picker opens or closes anywhere in the document. The function returns a handle that allows to control the started observation.
+To end observation the `disconnect()` function of the handle must be called.
+
+### observeElement
+
+```js
+import { observeElement } from "select-events/core";
+
+// start specific element observation by calling observeElement()
+const { disconnect } = observeElement($selectElement,
+    (select, selectOpened) => {
+        if (selectOpened)
+            console.log(`element ${select} picker opened`)
+        else
+            console.log(`element ${select} picker closed`)
+    }
+);
+
+// end the observation anytime by calling disconnect()
+disconnect();
+```
+
+To start element-specific observation `observeElement()` must be called with a reference to the target element and a callback, that will receive the HTML `<select>` element reference and a bool flag indicating `pickerOpened` whenever the target's picker opens or closes. The function returns a handle that allows to control the started observation.
+To end observation the `disconnect()` function of the handle must be called.
 
 ## Why the weird naming?
 
@@ -56,7 +86,7 @@ The two dashes infront of the event types mark them as values that are defined i
 
 ## What should work? How does it work?
 
-When initialized the package queries and processes all `<select>` elements on the page, including all that are currently in the DOM when the init code runs, but also processing all future `<select>` elements that will be created at any point in time and added to the DOM. It also handles `<select>` elements in shadow DOM.
+When initialized the package queries and processes all `<select>` elements on the page, including all that are currently in the DOM when the init code runs, but also processing all future `<select>` elements that will be created at any point in time and added to the DOM. It also handles `<select>` elements in _open_ shadow DOM (but not in _closed_ shadow DOM).
 Any content of `<iframe>` elements is not processed.
 Processed elements are observed by a watcher that utilizes the css feature `select:open` to determine whether the dropdown is open or closed.
 A _StyleObserver_ mechanism will be triggered when the css selector matches, and will execute a callback that finally raises the DOM events.

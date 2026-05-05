@@ -70,9 +70,9 @@ export const setupWatcher = (element, onChange) => {
 
     startObserving(sentinelProperty, element, onChange, abortController);
 
-    const shutdown = () => {
+    const disconnect = () => {
         abortController.abort();
     };
 
-    return { shutdown };
+    return { disconnect };
 }
